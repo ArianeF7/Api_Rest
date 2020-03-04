@@ -29,6 +29,11 @@ namespace API_Rest
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
+            //configurando o swagger como serviço
+            services.AddSwaggerGen(config => {
+                config.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo {Title="API DE PRODUTOS",Version = "v1"});
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +53,12 @@ namespace API_Rest
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+            app.UseSwagger(); // Gerar um arquivo JSON - Swagger.json
+
+            app.UseSwaggerUI(config => { // Views HTML do Swagger
+                config.SwaggerEndpoint("/swagger/v1/swagger.json","v1 docs");
             });
         }
     }
